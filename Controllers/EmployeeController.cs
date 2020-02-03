@@ -73,16 +73,50 @@ namespace WebApplication12.Controllers
         {
 
             SqlCommand sqlCmd = new SqlCommand();
-            sqlCmd.CommandType = CommandType.Text;
-            sqlCmd.CommandText = "INSERT INTO Employee_Details (Employee_Name,Employee_Salary) Values (@Employee_Name,@Employee_Salary)";
+            sqlCmd.CommandType = CommandType.StoredProcedure;
+            sqlCmd.CommandText = "sp_InsertEmployee";
             sqlCmd.Connection = myConnection;
 
 
-            sqlCmd.Parameters.AddWithValue("@Employee_Name", employee.Employee_Name);
-            sqlCmd.Parameters.AddWithValue("@Employee_Salary", employee.Employee_Salary);
+            sqlCmd.Parameters.AddWithValue("@EName", employee.Employee_Name);
+            sqlCmd.Parameters.AddWithValue("@ESalary", employee.Employee_Salary);
             myConnection.Open();
             int rowInserted = sqlCmd.ExecuteNonQuery();
             myConnection.Close();
         }
+        [HttpPut(Name = "Put")]
+        public void PutEmployee(Employee employee)
+        {
+
+            SqlCommand sqlCmd = new SqlCommand();
+            sqlCmd.CommandType = CommandType.StoredProcedure;
+            sqlCmd.CommandText = "sp_UpdateEmployee";
+            sqlCmd.Connection = myConnection;
+
+
+            sqlCmd.Parameters.AddWithValue("@EName", employee.Employee_Name);
+            sqlCmd.Parameters.AddWithValue("@ESalary", employee.Employee_Salary);
+            sqlCmd.Parameters.AddWithValue("@ID", employee.Employee_Id);
+            myConnection.Open();
+            int rowInserted = sqlCmd.ExecuteNonQuery();
+            myConnection.Close();
+        }
+
+        [HttpDelete("{ID}", Name = "Delete")]
+        public void DeleteEmployee(int ID)
+        {
+
+            SqlCommand sqlCmd = new SqlCommand();
+            sqlCmd.CommandType = CommandType.StoredProcedure;
+            sqlCmd.CommandText = "sp_DeleteEmployee";
+            sqlCmd.Connection = myConnection;
+
+
+            sqlCmd.Parameters.AddWithValue("@ID", ID);
+            myConnection.Open();
+            int rowInserted = sqlCmd.ExecuteNonQuery();
+            myConnection.Close();
+        }
+
     }
 }
